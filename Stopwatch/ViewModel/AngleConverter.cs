@@ -9,22 +9,27 @@ namespace Stopwatch.ViewModel
     using System.Globalization;
     using System.Windows.Data;
 
-    class TimeNumberFormatConverter : IValueConverter
+    class AngleConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, 
             object parameter, CultureInfo culture)
         {
-            if (value is decimal)
-                return ((decimal)value).ToString("00.00");
-            else if(value is int)
-            {
-                if (parameter == null)
-                    return ((int)value).ToString("d1");
-                else
-                    return ((int)value).ToString(parameter.ToString());
-            }
+            double parsedValue;
 
-            return value;
+            if((value != null)
+                && double.TryParse(value.ToString(), out parsedValue)
+                && (parameter != null))
+            {
+                switch(parameter.ToString())
+                {
+                    case "Hours":
+                        return parsedValue * 30;
+                    case "Minutes":
+                    case "Seconds":
+                        return parsedValue * 6;
+                }
+            }
+            return 0;
         }
 
         public object ConvertBack(object value, Type targetType, 
