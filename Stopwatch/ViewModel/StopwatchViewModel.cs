@@ -54,8 +54,14 @@ namespace Stopwatch.ViewModel
         int _lastHours;
         int _lastMinutes;
         decimal _lastSeconds;
+        bool _lastRunning;
         private void TimerTick(object sender, EventArgs e)
         {
+            if(_lastRunning != Running)
+            {
+                _lastRunning = Running;
+                OnPropertyChanged("Running");
+            }
             if(_lastHours != Hours)
             {
                 _lastHours = Hours;
